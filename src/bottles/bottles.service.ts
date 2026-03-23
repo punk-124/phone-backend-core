@@ -4,9 +4,9 @@ import { DailyQuotaService } from '../common/daily-quota.service';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { ThrowBottleDto } from './dto/throw-bottle.dto';
 
-type BottleStatus = 'floating' | 'picked';
+export type BottleStatus = 'floating' | 'picked';
 
-interface Bottle {
+export interface Bottle {
   id: string;
   content: string;
   authorId: string;
@@ -14,6 +14,26 @@ interface Bottle {
   createdAt: string;
   pickedBy?: string;
   pickedAt?: string;
+}
+
+export interface MineBottlesResponse {
+  thrown: Bottle[];
+  picked: Bottle[];
+  pagination: {
+    offset: number;
+    limit: number;
+    thrownTotal: number;
+    pickedTotal: number;
+  };
+}
+
+export interface BottlePoolResponse {
+  rows: Bottle[];
+  pagination: {
+    offset: number;
+    limit: number;
+    total: number;
+  };
 }
 
 const ACTION_THROW = '\u6254\u74f6\u5b50';
@@ -81,7 +101,7 @@ export class BottlesService {
     return bottle;
   }
 
-  mine(userId: string, query: PaginationQueryDto) {
+  mine(userId: string, query: PaginationQueryDto): MineBottlesResponse {
     const thrown = this.bottles.filter((item) => item.authorId === userId);
     const picked = this.bottles.filter((item) => item.pickedBy === userId);
     const thrownPage = thrown.slice(query.offset, query.offset + query.limit);
@@ -101,7 +121,7 @@ export class BottlesService {
     };
   }
 
-  pool(query: PaginationQueryDto) {
+  pool(query: PaginationQueryDto): BottlePoolResponse {
     const total = this.bottles.length;
     const rows = this.bottles.slice(query.offset, query.offset + query.limit);
     this.dailyQuotaService.consumeRead(Math.max(rows.length, 1), ACTION_VIEW_POOL);

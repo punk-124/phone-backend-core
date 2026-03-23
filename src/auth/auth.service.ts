@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidV4 } from 'uuid';
 import { AuthUser } from '../common/auth-user.interface';
 
-interface TokenPair {
+export interface TokenPair {
   accessToken: string;
   refreshToken: string;
   expiresIn: number;

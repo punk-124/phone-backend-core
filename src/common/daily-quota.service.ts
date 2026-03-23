@@ -1,4 +1,4 @@
-import { Injectable, TooManyRequestsException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -20,7 +20,10 @@ export class DailyQuotaService {
   consumeRead(rows: number, actionLabel: string): void {
     this.rollDayIfNeeded();
     if (this.readUsed + rows > this.maxReadRows) {
-      throw new TooManyRequestsException(this.buildExceededMessage(actionLabel));
+      throw new HttpException(
+        this.buildExceededMessage(actionLabel),
+        HttpStatus.TOO_MANY_REQUESTS
+      );
     }
     this.readUsed += rows;
   }
@@ -28,7 +31,10 @@ export class DailyQuotaService {
   consumeWrite(rows: number, actionLabel: string): void {
     this.rollDayIfNeeded();
     if (this.writeUsed + rows > this.maxWriteRows) {
-      throw new TooManyRequestsException(this.buildExceededMessage(actionLabel));
+      throw new HttpException(
+        this.buildExceededMessage(actionLabel),
+        HttpStatus.TOO_MANY_REQUESTS
+      );
     }
     this.writeUsed += rows;
   }

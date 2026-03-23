@@ -31,7 +31,10 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: (origin, callback) => {
+    origin: (
+      origin: string | undefined,
+      callback: (error: Error | null, allow?: boolean) => void
+    ) => {
       if (!origin || origins.length === 0 || origins.includes(origin)) {
         return callback(null, true);
       }
