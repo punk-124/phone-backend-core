@@ -34,9 +34,11 @@ app.use('*', async (c, next) => {
   const allowOrigins = parseOrigins(c.env.CORS_ORIGINS);
   const origin = c.req.header('Origin') ?? '';
 
-  if (origin && allowOrigins.includes(origin)) {
+  if (origin && (allowOrigins.includes('*') || allowOrigins.includes(origin))) {
     c.header('Access-Control-Allow-Origin', origin);
     c.header('Vary', 'Origin');
+  } else if (allowOrigins.includes('*')) {
+    c.header('Access-Control-Allow-Origin', '*');
   }
   c.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   c.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');

@@ -8,7 +8,7 @@ database_name = "phone_backend_core"
 database_id = "74bf973d-351b-43a7-becf-9537f79a9a6f"
 
 [vars]
-CORS_ORIGINS = "https://app.example.com,http://localhost:5173"
+CORS_ORIGINS = "*"
 DAILY_READ_LIMIT = "5000000"
 DAILY_WRITE_LIMIT = "100000"
 QUOTA_TIMEZONE = "Asia/Shanghai"
